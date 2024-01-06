@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operations User Page</title>
+    <link rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #1e1e1e;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        h2 {
+            color: #1db954;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            color: #b3b3b3;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #1db954;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #25a056;
+        }
+
+        .sgnup {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .upload-btn {
+            margin-top: 30px;
+        }
+
+        .logout-button {
+            background-color: #1DB954;
+            color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .logout-button:hover {
+            background-color: #1ed760;
+        }
+    </style>
+    <script>
+        async function handleFileUpload() {
+            const fileInput = document.getElementById('fileInput');
+            fileInput.click();  // Trigger the file input to open
+        }
+
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (file) {
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+            
+                    const response = await fetch('http://localhost:8000/api/upload/', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer YOUR_AUTH_TOKEN',  // Replace with your actual authentication token
+                        },
+                        body: formData,
+                    });
+            
+                    if (response.ok) {
+                        console.log('File uploaded successfully:', response.json());
+                        // Show a success message (you can customize this)
+                        alert('File uploaded successfully!');
+                    } else {
+                        console.error('File upload failed:', response.statusText);
+                        // Handle failure (show error message, redirect, etc.)
+                        alert('File upload failed. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('File upload failed:', error);
+                    // Handle error (show error message, redirect, etc.)
+                    alert('File upload failed. Please try again.');
+                }
+            } else {
+                alert('Please select a file to upload.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div style="position: fixed; top: 10px; right: 10px; z-index: 9999; width: 300px;">
+        <!-- You can include any messages or alerts specific to this page if needed -->
+    </div>
+    
+    <h2>Welcome Operations User</h2>
+    
+    <div class="upload-btn">
+        <h3>Upload a File</h3>
+        <input type="file" id="fileInput" style="display: none" onchange="uploadFile()">
+        <button type="button" onclick="handleFileUpload()">Upload File</button>
+    </div>
+    
+    <a href="{% url 'signout' %}" class="logout-button">Logout</a>
+</body>
+</html>
